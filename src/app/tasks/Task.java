@@ -1,11 +1,15 @@
+package app.tasks;
+
+import app.enums.Status;
+import app.taskmamager.TaskManager;
+
 public class Task extends TaskManager {
     protected String title;
     protected String description;
     protected Status status;
     protected int id;
-    private static int taskIdCounter = 100;
+    private static int taskIdCounter = 1;
 
-    //////////////////////////////КОНСТРУКТОРЫ//////////////////////////////////
     public Task(String title, String description, Status status) {
         this.title = title;
         this.description = description;
@@ -18,7 +22,6 @@ public class Task extends TaskManager {
         return id;
     }
 
-    //////////////////////////////ГЕТТЕР и СЕТТЕР СТАТУСА//////////////////////////////////
     public Status getStatus() {
         return status;
     }

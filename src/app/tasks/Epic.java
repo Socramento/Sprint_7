@@ -1,14 +1,16 @@
+package app.tasks;
+
+import app.enums.Status;
+
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class Epic extends Task {
     ArrayList<SubTask> saveSubTask;
-    private static int epicIdCounter = 200;
+
 
     public Epic(String title, String description, Status status) {
-        super(title, description, status); // вызываем конструктор Task и наследуем поля
+        super(title, description, status);
         saveSubTask = new ArrayList<>();
-        setId(epicIdCounter++);
     }
 
     public int getId() {
