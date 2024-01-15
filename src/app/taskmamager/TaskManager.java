@@ -6,98 +6,117 @@ import app.tasks.SubTask;
 import app.tasks.Task;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Objects;
 
 public class TaskManager {
-    ArrayList<Task> listTask;
-    ArrayList<Epic> listEpic;
-    ArrayList<SubTask> listSubTask;
-
+    HashMap<Integer, Task> listTask;
+    HashMap<Integer, Epic> listEpic;
+    HashMap<Integer, SubTask> listSubTask;
+    protected Status status;
     protected int taskId = 0;
     protected int epicId = 0;
     protected int subTaskId = 0;
 
     public TaskManager() {
-        listTask = new ArrayList<>();
-        listEpic = new ArrayList<>();
-        listSubTask = new ArrayList<>();
+        listTask = new HashMap<>();
+        listEpic = new HashMap<>();
+        listSubTask = new HashMap<>();
+        //status = Status.NEW;
     }
 
+
     public ArrayList<Task> getListTask() {
-        return listTask;
+        return new ArrayList<>(listTask.values());
     }
 
     public ArrayList<Epic> getListEpic() {
-        return listEpic;
+        return new ArrayList<>(listEpic.values());
     }
 
     public ArrayList<SubTask> getListSubTask() {
-        return listSubTask;
+        return new ArrayList<>(listSubTask.values());
     }
 
-    public void addTask(Task task) {
-        listTask.add(taskId++, task);
-    }
-
-    public void addEpic(Epic epic) {
-        listEpic.add(epicId++, epic);
-    }
-
-    public void addSubTask(SubTask subTask) {
-        listSubTask.add(subTaskId++, subTask);
-
-    }
-
-    public Task getTask(Task task) {
-        return task;
-    }
-
-    public Epic getEpic(Epic epic) {
-        return epic;
-    }
-
-    public SubTask getSubTask(SubTask subTask) {
-        return subTask;
-    }
 
     public void clearTask() {
         listTask.clear();
     }
 
-    public void clearEpic(Status status) {
+    public void clearEpic() {
+        listSubTask.clear();
         listEpic.clear();
-        status = Status.NEW;
-        System.out.println(status);
+
     }
 
     public void clearSubTask() {
         listSubTask.clear();
+
     }
 
-    public Task getTaskForId(Task task, int taskId) {
-        listTask.get(taskId);
-        return task;
+
+    public Task getTaskById(Task task) {
+        return listTask.get(task.getId());
     }
 
-    public Epic getEpicForId(Epic epic, int epicId) {
-        listEpic.get(epicId);
-        return epic;
+    public Epic getEpicById(Epic epic) {
+        return listEpic.get(epic.getId());
     }
 
-    public SubTask getSubTaskForId(SubTask subTack, int subTaskId) {
-        listSubTask.get(subTaskId);
-        return subTack;
+    public SubTask getSubTaskById(SubTask subTask) {
+
+        return listSubTask.get(subTask.getId());
     }
+
+
+    public void addTask(Task task) {
+        listTask.put(++taskId, task);
+        task.setStatus(Status.DONE);
+    }
+
+    public void addEpic(Epic epic) {
+        listEpic.put(++epicId, epic);
+        epic.calculateEpicStatus();
+    }
+
+    public void addSubTask(SubTask subTask) {
+        listSubTask.put(++subTaskId, subTask);
+        subTask.setStatus(Status.DONE);
+
+    }
+
 
     public void updateTask(Task task) {
-        listTask.add(task);
+        clearTask();
+        listTask.put(task.getId(), task);
+        task.setStatus(Status.DONE);
     }
 
     public void updateEpic(Epic epic) {
-        listEpic.add(epic);
+        clearEpic();
+        listEpic.put(epic.getId(), epic);
     }
+
     public void updateSubTask(SubTask subTask) {
-        listSubTask.add(subTask);
+        clearSubTask();
+        listSubTask.put(subTask.getId(), subTask);
+        subTask.setStatus(Status.DONE);
+    }
+
+
+    public void removeTaskById(Task task) {
+        listTask.remove(task.getId(), task);
+        task.setStatus(Status.NEW);
+    }
+
+    public void removeEpicById(Epic epic) {
+        listTask.remove(epic.getId(), epic);
+        epic.setStatus(Status.NEW);
+    }
+
+    public void removeSubTaskById(SubTask subTask) {
+        listTask.remove(subTask.getId(), subTask);
+        subTask.setStatus(Status.NEW);
     }
 
     @Override

@@ -7,13 +7,18 @@ public class Task extends TaskManager {
     protected String title;
     protected String description;
     protected Status status;
+
+    public int getId() {
+        return id;
+    }
+
     protected int id;
     private static int taskIdCounter = 1;
 
-    public Task(String title, String description, Status status) {
+    public Task(String title, String description) {
         this.title = title;
         this.description = description;
-        this.status = status;
+        this.status = Status.NEW;
         setId(taskIdCounter++);
     }
 
@@ -37,6 +42,6 @@ public class Task extends TaskManager {
                 ", description='" + description + '\'' +
                 ", status=" + status +
                 ", id=" + id +
-                '}';
+                '}' + "-->";
     }
 }

@@ -5,12 +5,11 @@ import app.enums.Status;
 import java.util.ArrayList;
 
 public class Epic extends Task {
-    ArrayList<SubTask> saveSubTask;
+    public ArrayList<SubTask> epicSubTask;
 
-
-    public Epic(String title, String description, Status status) {
-        super(title, description, status);
-        saveSubTask = new ArrayList<>();
+    public Epic(String title, String description) {
+        super(title, description);
+        epicSubTask = new ArrayList<>();
     }
 
     public int getId() {
@@ -18,42 +17,44 @@ public class Epic extends Task {
     }
 
     public void addSubTaskInEpic(SubTask subTack) {
-        saveSubTask.add(subTack);
+        epicSubTask.add(subTack);
+        subTack.setStatus(Status.DONE);
     }
 
-    public Status calculateEpicStatus() {
-        boolean allDone = true;
-        boolean allNew = true;
+    public ArrayList<SubTask> getSubTaskInEpic() {
+        calculateEpicStatus();
+        return epicSubTask;
+    }
 
-        for (SubTask el : saveSubTask) {
-            if (el.getStatus() != Status.DONE) {
-                allDone = false;
+    public void clearSubTaskInEpic(SubTask subTack) {
+        epicSubTask.clear();
+        subTack.setStatus(Status.NEW);
+    }
+
+    public void removeSubTaskById(SubTask subTask) {
+        epicSubTask.remove(subTask.getId());
+        setStatus(Status.NEW);
+    }
+
+    public void calculateEpicStatus() {
+        int allDoneCount = 0;
+        int allNewCount = 0;
+
+        for (SubTask el : epicSubTask) {
+            if (el.getStatus() == Status.DONE) {
+                allDoneCount++;
             }
-            if (el.getStatus() != Status.NEW) {
-                allNew = false;
+            if (el.getStatus() == Status.NEW) {
+                allNewCount++;
             }
         }
 
-        if (allNew || saveSubTask.isEmpty()) {
-            return Status.NEW;
-        } else if (allDone) {
-            return Status.DONE;
+        if (allNewCount == epicSubTask.size() || epicSubTask.isEmpty()) {
+            status = Status.NEW;
+        } else if (allDoneCount == epicSubTask.size()) {
+            status = Status.DONE;
         } else {
-            return Status.IN_PROGRESS;
+            status = Status.IN_PROGRESS;
         }
-    }
-
-    public void clearSubTask(SubTask subTack) {
-        saveSubTask.clear();
-    }
-
-    public SubTask saveSubTask(SubTask subTack) {
-        saveSubTask.get(subTaskId);
-        return subTack;
-    }
-
-    public SubTask deleteSubTask(SubTask subTack) {
-        saveSubTask.remove(subTaskId);
-        return subTack;
     }
 }
