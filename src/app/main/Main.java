@@ -1,5 +1,6 @@
 package app.main;
 
+import app.enums.Status;
 import app.taskmamager.TaskManager;
 import app.tasks.Epic;
 import app.tasks.SubTask;
@@ -9,16 +10,16 @@ public class Main {
     public static void main(String[] args) {
         TaskManager taskManager = new TaskManager();
 
-        Task task = new Task("Задача     ", "  Целая");
+        Task task = new Task("Задача     ", " Целая  ");
 
-        Epic epic1 = new Epic("Эпик 1", " ПЕРВЫЙ");
-        SubTask subTack1 = new SubTask("Подзадача#", "   номер 1");
-        SubTask subTack2 = new SubTask("Подзадача#", "   номер 2");
-        SubTask subTack3 = new SubTask("Подзадача#", "   номер 3");
+        Epic epic1 = new Epic("Эпик 1 ####", " ПЕРВЫЙ ");
+        SubTask subTask1 = new SubTask("########## ", " ##sT1##");
+        SubTask subTask2 = new SubTask("########## ", " ##sT2##");
+        //SubTask subTask3 = new SubTask("########## ", " ##ST3##");
 
-        Epic epic2 = new Epic("Эпик 2", " ВТОРОЙ");
-        SubTask subTackA = new SubTask("Подзадача@", "   литер А");
-        SubTask subTackB = new SubTask("Подзадача@", "   литер В");
+        Epic epic2 = new Epic("Эпик 2 @@@@", " ВТОРОЙ");
+        SubTask subTaskA = new SubTask("@@@@@@@@@@ ", " @@sTA@@");
+        //SubTask subTaskB = new SubTask("@@@@@@@@@@ ", " @@sTB@@");
 
         /**            a. Получение списка всех задач.        */
 //        System.out.println(taskManager.getListTask());
@@ -26,16 +27,23 @@ public class Main {
 //        System.out.println(taskManager.getListSubTask());
 
         /**            d. Создание. Сам объект должен передаваться в качестве параметра.        */
-//        taskManager.addTask(task);
-//        taskManager.addEpic(epic1);
-//        taskManager.addEpic(epic2);
+        taskManager.addTask(task);
+        taskManager.addEpic(epic1);
+        taskManager.addEpic(epic2);
 
-//        taskManager.addSubTask( subTack1);
-//        taskManager.addSubTask(subTack2);
-//        taskManager.addSubTask(subTack3);
+        subTask1.setEpicId(epic1.getId());
+        subTask2.setEpicId(epic1.getId());
+        //subTask3.setEpicId(epic1.getId());
 
-//        taskManager.addSubTask(subTackA);/**ДОБАВИЛ САБТАСКИ*/
-//        taskManager.addSubTask(subTackB);
+        subTaskA.setEpicId(epic2.getId());
+        //subTaskB.setEpicId(epic2.getId());
+
+        taskManager.addSubTask(subTask1);
+        taskManager.addSubTask(subTask2);
+        //taskManager.addSubTask(subTask3);
+
+        taskManager.addSubTask(subTaskA);
+        //taskManager.addSubTask(subTaskB);
 
         /**            a. Получение списка всех задач.                                         */
 //        System.out.println(taskManager.getListTask());
@@ -48,10 +56,19 @@ public class Main {
 //        taskManager.clearEpic();
 //        taskManager.clearSubTask();
 
+        /**            h. Изменение статуса.                                                 */
+        subTask1.setStatus(Status.DONE);
+        subTask2.setStatus(Status.DONE);
+        //subTask3.setStatus(Status.DONE);
+
         /**            a. Получение списка всех задач.                                         */
-//        System.out.println(taskManager.getListTask());
-//        System.out.println(taskManager.getListEpic());
-//        System.out.println(taskManager.getListSubTask());
+        System.out.println(taskManager.getListTask());
+        System.out.println(taskManager.getListEpic());
+        System.out.println(taskManager.getListSubTask());
+        /**            a. Получение статуса.                                         */
+//        System.out.println(task.getStatus());
+//        System.out.println(epic1.getStatus());
+//        System.out.println(subTask1.getStatus());
 
         /**            c. Получение по идентификатору.                                         */
 //        System.out.println(taskManager.getTaskById(task));
@@ -64,19 +81,24 @@ public class Main {
         /**            e. Обновление.                                                          */
 //        taskManager.updateTask(task);
 //        taskManager.updateEpic(epic2);
-//        taskManager.updateSubTask(subTack1);
+//        taskManager.updateSubTask(subTask1);
 
         /**            f. Удаление по идентификатору.                                          */
-//        taskManager.removeTaskById(task);
-//        taskManager.removeEpicById(epic);
-//        taskManager.removeSubTaskById(subTack1);
+        taskManager.removeTaskById(task);
+        taskManager.removeEpicById(epic2);
+        taskManager.removeSubTaskById(subTask2);
+        System.out.println("-----------------------------------");
+        /**            a. Получение списка всех задач.                                         */
+        System.out.println(taskManager.getListTask());
+        System.out.println(taskManager.getListEpic());
+        System.out.println(taskManager.getListSubTask());
 
         /**            3а. Получение списка всех подзадач определённого эпика.                 */
-//        epic1.addSubTaskInEpic(subTack1);
-//        epic1.addSubTaskInEpic(subTack2);
-//        epic1.addSubTaskInEpic(subTack3);
-//        epic2.addSubTaskInEpic(subTackA);
-//        epic2.addSubTaskInEpic(subTackB);
+//        epic1.addSubTaskInEpic(subTask1);
+//        epic1.addSubTaskInEpic(subTask2);
+//        epic1.addSubTaskInEpic(subTask3);
+//        epic2.addSubTaskInEpic(subTaskA);
+//        epic2.addSubTaskInEpic(subTaskB);
 //
 //        System.out.println(epic1.getSubTaskInEpic());
 //        System.out.println(epic2.getSubTaskInEpic());
