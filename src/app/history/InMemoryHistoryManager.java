@@ -1,6 +1,7 @@
-package app.tasks;
+package app.history;
 
 import app.enums.HistoryManager;
+import app.tasks.Task;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +17,11 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     @Override
     public void add(Task task) {
+        if (task == null) {
+            System.out.println("Пусто");
+            return;
+        }
+
         if (historyList.size() >= HISTORY_LIST_MAX_SIZE)
             historyList.remove(0);
         historyList.add(task);

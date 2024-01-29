@@ -1,9 +1,12 @@
-package app.tasks;
+package app.history;
 
 import app.enums.HistoryManager;
 import app.enums.Status;
 import app.intefaces.TaskManager;
-import app.taskmamager.Managers;
+import app.taskmanager.Managers;
+import app.tasks.Epic;
+import app.tasks.Subtask;
+import app.tasks.Task;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -12,7 +12,7 @@ public interface TaskManager {
 
     ArrayList <Epic> getEpics();
 
-    ArrayList <Subtask> getSubtasks();
+    List <Subtask> getSubtasks();
 
     List<Task> getHistory();
 
