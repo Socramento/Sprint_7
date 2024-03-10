@@ -50,7 +50,7 @@ public class Task {
 
     @Override
     public String toString() {
-        return "id = " + id + " ,название = " + title + ", описание = " + description + ", статус = " + status + "\n";
+        return "id = " + id + ", название = " + title + ", описание = " + description + ", статус = " + status + "\n";
     }
 
 
