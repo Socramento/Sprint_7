@@ -1,19 +1,22 @@
 package app.tasks;
 
 import app.enums.Status;
+import app.enums.TypeTES;
 
 import java.util.Objects;
 
 public class Task {
-    protected String title;
+    protected String name;
     protected String description;
     protected Status status;
     protected int id;
+    public TypeTES type;
 
-    public Task(String title, String description) {
-        this.title = title;
+    public Task(String name, String description) {
+        this.name = name;
         this.description = description;
         this.status = Status.NEW;
+        this.type = type;
     }
 
     public int getId() {
@@ -25,7 +28,7 @@ public class Task {
     }
 
     public String getName() {
-        return title;
+        return name;
     }
 
     public String getDescription() {
@@ -37,11 +40,19 @@ public class Task {
     }
 
     public void setName(String name) {
-        this.title = name;
+        this.name = name;
     }
 
     public void setStatus(Status status) {
         this.status = status;
+    }
+
+    public void setTypeTES(TypeTES type) {/** Под вопросом*/
+        this.type = type;
+    }
+
+    public TypeTES getTypeTES(){
+        return type;
     }
 
     public void setId(int id) {
@@ -50,8 +61,11 @@ public class Task {
 
     @Override
     public String toString() {
-        return "id = " + id + ", название = " + title + ", описание = " + description + ", статус = " + status + "\n";
+        // "id = " + id + TypeTES.values() + ", название = " + name + ", описание = " + description + ", статус = " + status + "\n";
+
+        return id + ", " + type + ", " + name + ", " + description + ", " + status + "\n";
     }
+
 
 
     @Override

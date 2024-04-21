@@ -2,7 +2,6 @@ package app.history;
 
 import app.enums.HistoryManager;
 import app.tasks.Task;
-
 import java.util.*;
 
 public class InMemoryHistoryManager implements HistoryManager {
@@ -61,6 +60,8 @@ public class InMemoryHistoryManager implements HistoryManager {
             history.add(current.data);
             current = current.next;
         }
+
+
         return history;
     }
 
