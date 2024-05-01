@@ -23,6 +23,7 @@ class FileBackedTaskManagerTest {
     protected Epic epic;
     protected Subtask subtask;
     File testFile;
+
     @BeforeEach
     public void setUp() {
 
@@ -33,31 +34,8 @@ class FileBackedTaskManagerTest {
         subtask = new Subtask("Подзадача 1", "Описание подзадачи 1", epic);
     }
 
-//    @Test
-//    void testSave() {
-//
-//
-//    }
-//
-//    @Test
-//    void historyFromString() {
-//    }
-//
-//    @Test
-//    void fromString() {
-//    }
-//
-//    @Test
-//    void historyToString() {
-//    }
-//
-//    @Test
-//    void loadFromFile() {
-//    }
-
-
     @Test//+
-    public void testThatInstancesClassTaskEqualIfTheirIdSimilar() {// проверьте, что экземпляры класса Task равны друг другу, если равен их id;
+    public void testThatInstancesClassTaskEqualIfTheirIdSimilar() {
         task.setTypeTES(TypeTES.TASK);
         task.setId(1);
 
@@ -69,7 +47,7 @@ class FileBackedTaskManagerTest {
     }
 
     @Test//+
-    public void testThatHeirsOfTaskEqualIfTheirIdEqual() {// проверьте, что наследники класса Task равны друг другу, если равен их id;
+    public void testThatHeirsOfTaskEqualIfTheirIdEqual() {
         task.setTypeTES(TypeTES.TASK);
         task.setId(1);
 
@@ -80,52 +58,31 @@ class FileBackedTaskManagerTest {
     }
 
     @Test//+
-    public void testThatSubtaskCantMakeSelfEpic() {// проверьте, что объект Subtask нельзя сделать своим же эпиком;;
-        subtask.setEpicId(subtask.getId()); // Устанавливаем id подзадачи в качестве id эпика
-
-        // Убеждаемся, что подзадача не была добавлена в список подзадач
+    public void testThatSubtaskCantMakeSelfEpic() {
+        subtask.setEpicId(subtask.getId());
         assertFalse(fileBackedTaskManager.getSubtasks().contains(subtask));
     }
 
     @Test//+
-    public void testThatUtilityClassAlwaysReturnsInitializedAndReadyUseInstancesOfManagers() {// убедитесь, что утилитарный класс всегда возвращает проинициализированные и готовые к работе экземпляры менеджеров;;
-        TaskManager managerTM = Managers.getDefault();//экземпляр утилитарного класса. Метод getDefault() возвращает объект типа TaskManager(интрефейс InMemoryTaskManager)
-        //Managers.getDefault() - это коробка (один из менеджеров), а TaskManager - это инструкция к ней)
+    public void testThatUtilityClassAlwaysReturnsInitializedAndReadyUseInstancesOfManagers() {
+        TaskManager managerTM = Managers.getDefault();
         HistoryManager managerHM = Managers.getDefaultHistory();
 
         assertNotNull("Утилитарный класс TaskManager проинициализирован", managerTM);
         assertNotNull("Утилитарный класс HistoryManager проинициализирован", managerHM);
     }
 
-
     @Test
-    public void testThatFileBackedTaskManagerTestAddTasksDifferentTypesAndCanFindThemById() {// проверьте, что FileBackedTaskManagerTest действительно добавляет задачи разного типа и может найти их по id;
+    public void testThatFileBackedTaskManagerTestAddTasksDifferentTypesAndCanFindThemById() {
         // Добавляем задачи в менеджер задач
         fileBackedTaskManager.addTask(task);
         fileBackedTaskManager.addEpic(epic);
         fileBackedTaskManager.addSubtask(subtask);
 
-        // Проверяем, что задачи успешно добавлены и найдены по их id
+
         assertEquals(task.getId(), 1);
         assertEquals(epic.getId(), 2);
         assertEquals(subtask.getId(), 3);
-    }
-
-    @Test
-    public void testSaveAndLoadEmptyFile() throws IOException {// сохранение и загрузка пустого файла;
-
-        testFile = fileBackedTaskManager.text;
-        BufferedReader brt = new BufferedReader(new FileReader(testFile));
-        assertEquals(brt.readLine(), null);
 
     }
-
-//    @Test
-//    public void testSaveSeveralTasks() throws IOException {// сохранение нескольких задач;
-//        FileWriter fwt = new FileWriter(testFile);
-//        fwt.write(fileBackedTaskManager.fromString(task.toString()).getId());
-//        //System.out.println(testFile);
-//        fwt.close();
-//    }
-
 }

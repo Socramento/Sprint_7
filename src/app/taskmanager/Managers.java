@@ -15,8 +15,3 @@ public class Managers {
         return new InMemoryHistoryManager();
     }
 }
-/*Managers (Класс):
-Этот класс предоставляет методы для создания экземпляров менеджеров задач и истории.
-Сейчас используются InMemoryTaskManager и InMemoryHistoryManager,
-которые предоставляют реализацию менеджеров задач и истории, хранящих данные в памяти.
- */
