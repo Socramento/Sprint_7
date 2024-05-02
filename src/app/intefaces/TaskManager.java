@@ -36,7 +36,7 @@ public interface TaskManager {
 
     void updateEpic(Epic epic);
 
-    int addSubtasks(Subtask subtask);
+    int addSubtask(Subtask subtask);
 
     Subtask findSubtask(Subtask subtask);
 
