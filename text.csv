@@ -1,1 +1,5 @@
-
+id, type, name, description,status, epic 
+name = Задача 1', description = Цельная', status = NEW, id = 1, type = TASK, Продолжительность = PT30M, Время начала = 2024-05-25T10:30}
+name = Подзадача 5', description = часть Эпика 1', status = NEW, id = 3, type = SUBTASK, Продолжительность = PT2M, Время начала = 2024-06-10T13:00}
+name = Подзадача 6', description = часть Эпика 1', status = NEW, id = 4, type = SUBTASK, Продолжительность = PT5M, Время начала = 2024-06-10T14:00}
+Epic{subList=[], endTime=+999999999-12-31T23:59:59.999999999}
