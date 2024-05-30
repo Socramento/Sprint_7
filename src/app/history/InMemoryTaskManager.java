@@ -8,6 +8,7 @@ import app.tasks.Epic;
 import app.tasks.Subtask;
 import app.tasks.Task;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 public class InMemoryTaskManager implements TaskManager {
@@ -16,6 +17,17 @@ public class InMemoryTaskManager implements TaskManager {
     protected HashMap<Integer, Subtask> listSubtasks = new HashMap<>();
     protected int id = 0;
     final HistoryManager historyManager = Managers.getDefaultHistory();
+
+    Comparator<Task> comparator = Comparator.comparing(Task:: getStartTime);
+    TreeSet<Task> sortTaskST = new TreeSet<>(comparator);
+
+    @Override
+    public TreeSet<Task> getPrioritizedTasks() {
+        for (Task event : sortTaskST) {
+            System.out.println(event);
+        }
+        return sortTaskST;
+    }
 
     @Override
     public List<Task> getHistory() {
@@ -41,6 +53,9 @@ public class InMemoryTaskManager implements TaskManager {
     public int addTask(Task task) {
         task.setId(++id);
         listTask.put(task.getId(), task);
+        if (task.getStartTime() != null) {
+            sortTaskST.add(task);
+        }
         return task.getId();
     }
 
@@ -49,6 +64,7 @@ public class InMemoryTaskManager implements TaskManager {
         epic.setId(++id);
         updateEpicStatus(epic);
         listEpics.put(epic.getId(), epic);
+
         return epic.getId();
     }
 
@@ -56,14 +72,18 @@ public class InMemoryTaskManager implements TaskManager {
     public int addSubtask(Subtask subtask) {
         subtask.setId(++id);
         Epic epic = listEpics.get(subtask.getEpicId());
+
         if (epic != null) {
             epic.getListSubtask().add(subtask);
             listSubtasks.put(subtask.getId(), subtask);
+            LocalDateTime startTimeSubtask = subtask.getStartTime();
+            if ( startTimeSubtask != null) {
+                sortTaskST.add(subtask);
+            }
             updateEpicStatus(epic);
             return subtask.getId();
         } else {
-            // Обработка случая, когда эпик не найден
-            return -1;
+            return -1; // Обработка случая, когда эпик не найден
         }
     }
 
@@ -166,6 +186,7 @@ public class InMemoryTaskManager implements TaskManager {
             updateEpicStatus(listEpics.get(subtask.getEpicId()));
         }
     }
+
 
     public void updateEpicStatus(Epic epic) {
         if (!epic.getListSubtask().isEmpty()) {

@@ -29,6 +29,7 @@ public class Epic extends Task {
 
     @Override
     public LocalDateTime getEndTime() {// находим последнее время окончания подзадачи
+
         LocalDateTime endT = LocalDateTime.MIN;
         for (Subtask subtask : subList) {
             LocalDateTime maxEnd = subtask.getStartTime().plus(subtask.duration);
@@ -48,9 +49,6 @@ public class Epic extends Task {
 
     @Override
     public String toString() {
-        return "Epic{" +
-                "subList=" + subList +
-                ", endTime=" +  getStartTime() +
-                '}';
+        return "ЭПИК" + ", ЗАВЕРШЕНИЕ = " +  getEndTime() + "\n";
     }
 }

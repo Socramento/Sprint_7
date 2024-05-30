@@ -142,7 +142,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
     @Override
     public int addSubtask(Subtask subtask) {
         subtask.type = TypeTES.SUBTASK;
-        final int id = super.addTask(subtask);
+        final int id = super.addSubtask(subtask);
         save();
         return id;
     }
