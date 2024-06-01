@@ -1,6 +1,7 @@
 package app.main;
 
 import app.enums.HistoryManager;
+import app.enums.Status;
 import app.history.FileBackedTaskManager;
 import app.history.InMemoryHistoryManager;
 import app.intefaces.TaskManager;
@@ -15,24 +16,14 @@ import java.time.Month;
 
 public class Main {
 
-    public static void main(String[] args)  {
+    public static void main(String[] args) {
         TaskManager taskManager = Managers.getDefault();
         InMemoryHistoryManager inMemoryHistoryManager = new InMemoryHistoryManager();
         FileBackedTaskManager fileBackedTaskManager = new FileBackedTaskManager();
         HistoryManager historyManager = Managers.getDefaultHistory();
 
-
-//        String test = "id, type, name, description, status\n" +
-//                "1, TASK, Задача 1, Цельная, NEW\n" +
-//                "3, SUBTASK, Подзадача 5, часть Эпика 1, NEW\n" +
-//                "2, EPIC, Эпик   1, Раздельная, NEW";
-
-//        File proverka = new File("C:\\Users\\Maik\\MAIK-GIT\\ТЗ-5\\java-kanban\\text.csv");
-//        System.out.println(Files.readString(proverka.toPath())); // способ чтения файлов
-
-
-        Task task1 = new Task("Задача 1", "Цельная", Duration.ofMinutes(30),  LocalDateTime.of(2024, Month.MAY, 25, 10,30));
-        Task task2 = new Task("Задача 2", "Цельная",  Duration.ofMinutes(25),  LocalDateTime.of(2024, Month.MAY, 25, 9,25));
+        Task task1 = new Task("Задача 1", "Цельная", Duration.ofMinutes(30), null);
+        Task task2 = new Task("Задача 2", "Цельная", Duration.ofMinutes(30), LocalDateTime.of(2024, Month.JUNE, 25, 18, 0));
 
         Epic epic1 = new Epic("Эпик   1", "Раздельная");
 //        Epic epic2 = new Epic("Эпик   2", "Раздельная");
@@ -46,10 +37,11 @@ public class Main {
 ////        taskManager.addEpic(epic2);
 ////        taskManager.addTask(task1);
 ////
-        Subtask subtask1 = new Subtask("Подзадача 5", "часть Эпика 1", epic1, Duration.ofMinutes(2),  null);
-        Subtask subtask2 = new Subtask("Подзадача 6", "часть Эпика 1", epic1, Duration.ofMinutes(5),  LocalDateTime.of(2024, Month.JUNE, 10, 15,0));
-        Subtask subtask3 = new Subtask("Подзадача 7", "часть Эпика 1", epic1, Duration.ofMinutes(3),  LocalDateTime.of(2024, Month.JUNE, 10, 14,0));
-        Subtask subtask4 = new Subtask("Подзадача 8", "часть Эпика 1", epic1, Duration.ofMinutes(12),  LocalDateTime.of(2024, Month.JUNE, 18, 18,55));
+        Subtask subtask1 = new Subtask("Подзадача 5", "часть Эпика 1", epic1, Duration.ofMinutes(2), null);
+        Subtask subtask2 = new Subtask("Подзадача 6", "часть Эпика 1", epic1, Duration.ofMinutes(30), LocalDateTime.of(2024, Month.JUNE, 25, 12, 10));
+        subtask2.setStatus(Status.IN_PROGRESS);
+        Subtask subtask3 = new Subtask("Подзадача 7", "часть Эпика 1", epic1, Duration.ofMinutes(3), LocalDateTime.of(2024, Month.JUNE, 25, 18, 10));
+        Subtask subtask4 = new Subtask("Подзадача 8", "часть Эпика 1", epic1, Duration.ofMinutes(12), LocalDateTime.of(2024, Month.JUNE, 25, 11, 55));
         //        Subtask subtask8 = new Subtask("Подзадача 8", "Ч. Эпика 2", epic2);
 //        Subtask subtask9 = new Subtask("Подзадача 9", "для Э-2", epic4);
 
@@ -59,6 +51,7 @@ public class Main {
         fileBackedTaskManager.addSubtask(subtask4);
 
         fileBackedTaskManager.getPrioritizedTasks();
+
 //        Task returnTaskFromFile = fileBackedTaskManager.fromString("1, TASK, Задача 1, Цельная, NEW");
 //        System.out.println(returnTaskFromFile);
 //        FileBackedTaskManager.historyFromString(test);

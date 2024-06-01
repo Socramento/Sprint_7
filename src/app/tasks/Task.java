@@ -88,14 +88,14 @@ public class Task {
 @Override
 public String toString() {
     return
-            "name = " + name + '\'' +
-            ", description = " + description + '\'' +
-            ", status = " + status +
-            ", id = " + id +
-            ", type = " + type +
-            ", Продолжительность = " + duration +
-            ", Время начала = " + startTime +
-            '}' + "\n";
+             name + '\'' +
+            ", " + description + '\'' +
+            ", " + status +
+            ", " + id +
+            ", " + type +
+            ", " + duration +
+            " минут, " + startTime +
+             "\n";
 }
 
     @Override

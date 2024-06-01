@@ -22,7 +22,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
         try {
             FileWriter fw = new FileWriter(text);
             fw.write(historyToString(historyManager)); //записываю историю в файл через метод  historyToString(HistoryManager manager)
-            fw.write("id, type, name, description,status, epic \n");
+            fw.write("id, type, name, description,status, epic, Duration, LocalDateTime \n");
 
             for (Task task : listTask.values()) {
                 fw.write(task.toString());

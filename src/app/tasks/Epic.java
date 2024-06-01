@@ -32,14 +32,16 @@ public class Epic extends Task {
 
         LocalDateTime endT = LocalDateTime.MIN;
         for (Subtask subtask : subList) {
-            LocalDateTime maxEnd = subtask.getStartTime().plus(subtask.duration);
-            if (maxEnd.isAfter(endTime)) {
-                endT = maxEnd;
+            LocalDateTime startTime = subtask.getStartTime();
+            if (startTime != null) {
+                LocalDateTime maxEnd = startTime.plus(subtask.duration);
+                if (maxEnd.isAfter(endTime)) {
+                    endT = maxEnd;
+                }
             }
         }
         return endT;
     }
-
 
     public ArrayList<Subtask> getListSubtask() {
 

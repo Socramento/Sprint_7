@@ -18,14 +18,23 @@ public class InMemoryTaskManager implements TaskManager {
     protected int id = 0;
     final HistoryManager historyManager = Managers.getDefaultHistory();
 
-    Comparator<Task> comparator = Comparator.comparing(Task:: getStartTime);
+    Comparator<Task> comparator = Comparator.comparing(Task::getStartTime);
     TreeSet<Task> sortTaskST = new TreeSet<>(comparator);
+
+    public void intersection(Task task) {
+        boolean hasIntersection = sortTaskST.stream()
+                .anyMatch(el -> el.getStartTime().isBefore(task.getStartTime()) & el.getEndTime().isAfter(task.getStartTime()));
+
+        if (hasIntersection) {
+            System.out.println("ПЕРЕСЕЧЕНИЕ");
+        } else {
+            System.out.println("Пересечения нет!");
+        }
+    }
 
     @Override
     public TreeSet<Task> getPrioritizedTasks() {
-        for (Task event : sortTaskST) {
-            System.out.println(event);
-        }
+        sortTaskST.forEach(System.out::println);
         return sortTaskST;
     }
 
@@ -55,6 +64,7 @@ public class InMemoryTaskManager implements TaskManager {
         listTask.put(task.getId(), task);
         if (task.getStartTime() != null) {
             sortTaskST.add(task);
+            //intersection(task);
         }
         return task.getId();
     }
@@ -77,8 +87,9 @@ public class InMemoryTaskManager implements TaskManager {
             epic.getListSubtask().add(subtask);
             listSubtasks.put(subtask.getId(), subtask);
             LocalDateTime startTimeSubtask = subtask.getStartTime();
-            if ( startTimeSubtask != null) {
+            if (startTimeSubtask != null) {
                 sortTaskST.add(subtask);
+                intersection(subtask);
             }
             updateEpicStatus(epic);
             return subtask.getId();
@@ -125,9 +136,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void clearSubtasks() {
         listSubtasks.clear();
-        for (Epic epic : listEpics.values()) {
-            epic.setStatus(Status.NEW);
-        }
+        listSubtasks.values().forEach(epic -> epic.setStatus(Status.NEW));
     }
 
     @Override
@@ -141,11 +150,8 @@ public class InMemoryTaskManager implements TaskManager {
         listEpics.remove(epic.getId());
         epic.getListSubtask().clear();
         ArrayList<Subtask> listSubtask = getSubtasks();
-        for (Subtask subtask : listSubtask) {
-            if (subtask.getEpicId() == epic.getId()) {
-                listSubtasks.remove(subtask.getId());
-            }
-        }
+        listSubtask.removeIf(subtask -> subtask.getEpicId() == epic.getId());
+
         historyManager.remove(epic.getId());
     }
 
@@ -189,20 +195,18 @@ public class InMemoryTaskManager implements TaskManager {
 
 
     public void updateEpicStatus(Epic epic) {
-        if (!epic.getListSubtask().isEmpty()) {
-            int statusNew = 0;
-            int statusDone = 0;
-            for (Subtask subtask : epic.getListSubtask()) {
-                switch (subtask.getStatus()) {
-                    case NEW:
-                        ++statusNew;
-                        break;
-                    case DONE:
-                        ++statusDone;
-                        break;
-                    default:
-                }
-            }
+        if (epic.getListSubtask().isEmpty()) {
+            epic.setStatus(Status.NEW);
+            return;
+        }
+
+        long statusNew = epic.getListSubtask().stream()
+                .filter(subtask -> subtask.getStatus() == Status.NEW)
+                .count();
+
+        long statusDone = epic.getListSubtask().stream()
+                .filter(subtask -> subtask.getStatus() == Status.DONE)
+                .count();
             if (statusNew == epic.getListSubtask().size()) {
                 epic.setStatus(Status.NEW);
 
@@ -212,8 +216,6 @@ public class InMemoryTaskManager implements TaskManager {
             } else if (epic.getStatus() != Status.IN_PROGRESS) {
                 epic.setStatus(Status.IN_PROGRESS);
             }
-        } else {
-            epic.setStatus(Status.NEW);
-        }
+
     }
 }
