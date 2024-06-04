@@ -94,7 +94,7 @@ public class InMemoryTaskManager implements TaskManager {
             updateEpicStatus(epic);
             return subtask.getId();
         } else {
-            return -1; // Обработка случая, когда эпик не найден
+            return -1;
         }
     }
 
@@ -216,6 +216,5 @@ public class InMemoryTaskManager implements TaskManager {
             } else if (epic.getStatus() != Status.IN_PROGRESS) {
                 epic.setStatus(Status.IN_PROGRESS);
             }
-
     }
 }

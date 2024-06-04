@@ -16,7 +16,7 @@ public class Epic extends Task {
         this.duration = Duration.between(endTime, startTime);
     }
 
-    public LocalDateTime getStartTime() { // находим задачу с наиболее ранним временем начала
+    public LocalDateTime getStartTime() {
         LocalDateTime startTime = LocalDateTime.MAX;
         for (Subtask subtask : subList) {
             LocalDateTime min = subtask.getStartTime();
@@ -24,11 +24,11 @@ public class Epic extends Task {
                 startTime = min;
             }
         }
-        return startTime;//  подзадача с наиболее ранним временем начала
+        return startTime;//
     }
 
     @Override
-    public LocalDateTime getEndTime() {// находим последнее время окончания подзадачи
+    public LocalDateTime getEndTime() {
 
         LocalDateTime endT = LocalDateTime.MIN;
         for (Subtask subtask : subList) {

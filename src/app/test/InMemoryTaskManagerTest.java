@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
     protected InMemoryTaskManager taskManager;
     protected InMemoryHistoryManager historyManager;
-    // Managers managers;
+
     protected Task task;
     protected Epic epic;
     protected Subtask subtask;
@@ -63,20 +63,19 @@ class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
 
     @Test
     public void testThatSubtaskCantMakeSelfEpic() {// проверьте, что объект Subtask нельзя сделать своим же эпиком;;
-        subtask.setEpicId(subtask.getId()); // Устанавливаем id подзадачи в качестве id эпика
+        subtask.setEpicId(subtask.getId());
 
-        // Убеждаемся, что подзадача не была добавлена в список подзадач
         assertFalse(taskManager.getSubtasks().contains(subtask));
     }
 
     @Test
     public void testThatUtilityClassAlwaysReturnsInitializedAndReadyUseInstancesOfManagers() {// убедитесь, что утилитарный класс всегда возвращает проинициализированные и готовые к работе экземпляры менеджеров;;
         TaskManager managerTM = Managers.getDefault();//экземпляр утилитарного класса. Метод getDefault() возвращает объект типа TaskManager(интрефейс InMemoryTaskManager)
-        //Managers.getDefault() - это коробка (один из менеджеров), а TaskManager - это инструкция к ней)
+
         HistoryManager managerHM = Managers.getDefaultHistory();
 
-        //assertNotNull("Утилитарный класс TaskManager проинициализирован", managerTM);
-        assertNotNull(managerHM);//"Утилитарный класс HistoryManager проинициализирован",
+        assertNotNull(managerTM, "Утилитарный класс TaskManager проинициализирован");
+        assertNotNull(managerHM,"Утилитарный класс HistoryManager проинициализирован");
     }
 
     @Test
@@ -125,30 +124,24 @@ class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
         taskManager.addTask(task);
         taskManager.addEpic(epic);
         taskManager.addSubtask(subtask);
-//        System.out.println(taskManager.getEpics());
-//        System.out.println(taskManager.getSubtasks());
         taskManager.removeSubtask(subtask);
 
-        // Проверяем, что подзадача больше не существует в списке подзадач
         assertNull(taskManager.findSubtask(subtask));
-        // Проверяем, что подзадача больше не содержит старых id
+
         assertEquals(0, epic.getListSubtask().size());
     }
 
     @Test
     public void testTaskManagerContainsOriginalTaskAfterFieldChanges() {
-        // Создаем оригинальную задачу
         Task originalTask = new Task("Задача 1", "Описание задачи 1", Duration.ofMinutes(3), LocalDateTime.of(2024, Month.JUNE, 28, 18, 10));
         originalTask.setTypeTES(TypeTES.TASK);
 
         taskManager.addTask(originalTask);
 
-        // Изменяем поля оригинальной задачи с помощью сеттеров
         originalTask.setName("Измененное название задачи");
         originalTask.setDescription("Измененное описание задачи");
         originalTask.setTypeTES(TypeTES.EPIC); // Изменяем тип задачи
 
-        // Проверяем, что поля оригинальной задачи изменились, но данные в менеджере остались неизменными
         assertEquals("Измененное название задачи", originalTask.getName(), "Имя не изменилось");//
         assertEquals("Измененное описание задачи", originalTask.getDescription(), "Описание не изменилось");
         assertEquals(TypeTES.EPIC, originalTask.getTypeTES(), "Статус не поменялся");
@@ -167,25 +160,25 @@ class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
         }
         epic.getListSubtask().addAll(subtasksList);
         taskManager.addEpic(epic);
-        taskManager.updateEpicStatus(epic); // Обновляем статус эпика
+        taskManager.updateEpicStatus(epic);
         assertEquals(Status.NEW, epic.getStatus());
 
         // b. Все подзадачи со статусом DONE.
         for (Subtask subtask : subtasksList) {
             subtask.setStatus(Status.DONE);
         }
-        taskManager.updateEpicStatus(epic); // Обновляем статус эпика
+        taskManager.updateEpicStatus(epic);
         assertEquals(Status.DONE, epic.getStatus());
 
         // c. Подзадачи со статусами NEW и DONE.
         subtasksList.get(0).setStatus(Status.NEW);
         subtasksList.get(1).setStatus(Status.DONE);
-        taskManager.updateEpicStatus(epic); // Обновляем статус эпика
+        taskManager.updateEpicStatus(epic);
         assertEquals(Status.IN_PROGRESS, epic.getStatus());
 
         // d. Подзадачи со статусом IN_PROGRESS.
         subtasksList.get(1).setStatus(Status.IN_PROGRESS);
-        taskManager.updateEpicStatus(epic); // Обновляем статус эпика
+        taskManager.updateEpicStatus(epic);
         assertEquals(Status.IN_PROGRESS, epic.getStatus());
     }
 }

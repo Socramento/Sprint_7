@@ -13,8 +13,8 @@ public class Task {
     protected Status status;
     protected int id;
     public TypeTES type;
-    protected Duration duration;   //продолжительность задачи
-    protected LocalDateTime startTime;   // дата и время, когда предполагается приступить к выполнению задачи
+    protected Duration duration;
+    protected LocalDateTime startTime;
 
     public Task(String name, String description, Duration duration, LocalDateTime startTime) {
         this.name = name;
@@ -79,12 +79,6 @@ public class Task {
         this.id = id;
     }
 
-//    @Override
-//    public String toString() {
-//        // "id = " + id + TypeTES.values() + ", название = " + name + ", описание = " + description + ", статус = " + status + "\n";
-//
-//        return id + ", " + type + ", " + name + ", " + description + ", " + status + "\n";
-//    }
 @Override
 public String toString() {
     return
