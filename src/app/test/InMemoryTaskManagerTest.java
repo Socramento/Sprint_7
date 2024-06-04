@@ -44,7 +44,7 @@ class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
     }
 
     @Test
-    public void testThatInstancesClassTaskEqualIfTheirIdSimilar() {// проверьте, что экземпляры класса Task равны друг другу, если равен их id;
+    public void testThatInstancesClassTaskEqualIfTheirIdSimilar() {
         task.setTypeTES(TypeTES.TASK);
         task.setId(1);
 
@@ -56,7 +56,7 @@ class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
     }
 
     @Test
-    public void testThatHeirsOfTaskEqualIfTheirIdEqual() {// проверьте, что наследники класса Task равны друг другу, если равен их id;
+    public void testThatHeirsOfTaskEqualIfTheirIdEqual() {
         task.setTypeTES(TypeTES.TASK);
         task.setId(1);
 
@@ -67,15 +67,15 @@ class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
     }
 
     @Test
-    public void testThatSubtaskCantMakeSelfEpic() {// проверьте, что объект Subtask нельзя сделать своим же эпиком;;
+    public void testThatSubtaskCantMakeSelfEpic() {
         subtask.setEpicId(subtask.getId());
 
         assertFalse(taskManager.getSubtasks().contains(subtask));
     }
 
     @Test
-    public void testThatUtilityClassAlwaysReturnsInitializedAndReadyUseInstancesOfManagers() {// убедитесь, что утилитарный класс всегда возвращает проинициализированные и готовые к работе экземпляры менеджеров;;
-        TaskManager managerTM = Managers.getDefault();//экземпляр утилитарного класса. Метод getDefault() возвращает объект типа TaskManager(интрефейс InMemoryTaskManager)
+    public void testThatUtilityClassAlwaysReturnsInitializedAndReadyUseInstancesOfManagers() {
+        TaskManager managerTM = Managers.getDefault();
 
         HistoryManager managerHM = Managers.getDefaultHistory();
 
@@ -84,20 +84,19 @@ class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
     }
 
     @Test
-    public void testThatInmemorytaskmanagerAddTasksDifferentTypesAndCanFindThemById() {// проверьте, что InMemoryTaskManager действительно добавляет задачи разного типа и может найти их по id;
-        // Добавляем задачи в менеджер задач
+    public void testThatInmemorytaskmanagerAddTasksDifferentTypesAndCanFindThemById() {
+
         taskManager.addTask(task);
         taskManager.addEpic(epic);
         taskManager.addSubtask(subtask);
 
-        // Проверяем, что задачи успешно добавлены и найдены по их id
         assertEquals(task.getId(), 1);
         assertEquals(epic.getId(), 2);
         assertEquals(subtask.getId(), 3);
     }
 
     @Test
-    public void testThatTasksWithInstalledIdMotConflictWithTasksGenerateID() {// проверьте, что задачи с заданным id и сгенерированным id не конфликтуют внутри менеджера;
+    public void testThatTasksWithInstalledIdMotConflictWithTasksGenerateID() {
         Task taskGenerateID = new Task("Задача", "Где id установлен самостоятельно");
         taskGenerateID.setId(1);
 
@@ -112,7 +111,7 @@ class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
     }
 
     @Test
-    public void testNotModificationTaskWhenAddInManager() {// создайте тест, в котором проверяется неизменность задачи (по всем полям) при добавлении задачи в менеджер
+    public void testNotModificationTaskWhenAddInManager() {
         taskManager.addTask(task);
         Task newTask = new Task("Задача 1", "Описание задачи 1", Duration.ofMinutes(3), LocalDateTime.of(2024, Month.JUNE, 27, 18, 10));
         taskManager.addTask(newTask);
@@ -125,7 +124,7 @@ class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
     }
 
     @Test
-    public void testDeletedSubtasksShouldNotStoreOldIDsInsideThemselves() {//Удаляемые подзадачи не должны хранить внутри себя старые id
+    public void testDeletedSubtasksShouldNotStoreOldIDsInsideThemselves() {
         taskManager.addTask(task);
         taskManager.addEpic(epic);
         taskManager.addSubtask(subtask);
@@ -145,7 +144,7 @@ class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
 
         originalTask.setName("Измененное название задачи");
         originalTask.setDescription("Измененное описание задачи");
-        originalTask.setTypeTES(TypeTES.EPIC); // Изменяем тип задачи
+        originalTask.setTypeTES(TypeTES.EPIC);
 
         assertEquals("Измененное название задачи", originalTask.getName(), "Имя не изменилось");//
         assertEquals("Измененное описание задачи", originalTask.getDescription(), "Описание не изменилось");
@@ -157,7 +156,6 @@ class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
 
         ArrayList<Subtask> subtasksList = new ArrayList<>();
 
-        // a. Все подзадачи со статусом NEW.
         for (int i = 0; i < 3; i++) {
             Subtask subtask = new Subtask("Подзадача " + i, "Описание", epic, Duration.ofMinutes(10), LocalDateTime.now());
             subtask.setStatus(Status.NEW);
@@ -168,20 +166,17 @@ class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
         taskManager.updateEpicStatus(epic);
         assertEquals(Status.NEW, epic.getStatus());
 
-        // b. Все подзадачи со статусом DONE.
         for (Subtask subtask : subtasksList) {
             subtask.setStatus(Status.DONE);
         }
         taskManager.updateEpicStatus(epic);
         assertEquals(Status.DONE, epic.getStatus());
 
-        // c. Подзадачи со статусами NEW и DONE.
         subtasksList.get(0).setStatus(Status.NEW);
         subtasksList.get(1).setStatus(Status.DONE);
         taskManager.updateEpicStatus(epic);
         assertEquals(Status.IN_PROGRESS, epic.getStatus());
 
-        // d. Подзадачи со статусом IN_PROGRESS.
         subtasksList.get(1).setStatus(Status.IN_PROGRESS);
         taskManager.updateEpicStatus(epic);
         assertEquals(Status.IN_PROGRESS, epic.getStatus());

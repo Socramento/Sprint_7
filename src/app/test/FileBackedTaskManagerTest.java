@@ -41,12 +41,12 @@ class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskManager>{
     }
 
     @Test
-    public void testSaveAndLoadEmptyFile() throws IOException {// сохранение и загрузка пустого файла;
+    public void testSaveAndLoadEmptyFile() throws IOException {
         FileWriter fw = new FileWriter(failTest);
         assertNotEquals(fw, null);
     }
     @Test
-    public void testThatFileBackedTaskManagerAddTasksDifferentTypesAndCanFindThemById() {// проверьте, что FileBackedTaskManagerTest действительно добавляет задачи разного типа и может найти их по id;
+    public void testThatFileBackedTaskManagerAddTasksDifferentTypesAndCanFindThemById() {
 
         taskManager.addTask(task);
         taskManager.addEpic(epic);
@@ -57,8 +57,8 @@ class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskManager>{
         assertEquals(subtask.getId(), 3);
     }
 
-    @Test//+
-    public void testThatInstancesClassTaskEqualIfTheirIdSimilar() {// проверьте, что экземпляры класса Task равны друг другу, если равен их id;
+    @Test
+    public void testThatInstancesClassTaskEqualIfTheirIdSimilar() {
         task.setTypeTES(TypeTES.TASK);
         task.setId(1);
 
