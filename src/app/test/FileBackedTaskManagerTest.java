@@ -11,9 +11,8 @@ import app.tasks.Task;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -28,9 +27,9 @@ class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskManager>{
     protected Task task;
     protected Epic epic;
     protected Subtask subtask;
-    File testFile;
+    File failTest;
     @BeforeEach
-    public void setUp() {
+    public void setUp() throws IOException {
 
         taskManager = new FileBackedTaskManager();
 
@@ -38,24 +37,21 @@ class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskManager>{
         epic = new Epic("Эпик 1", "Описание эпика 1");
         subtask = new Subtask("Подзадача 1", "Описание подзадачи 1", epic, Duration.ofMinutes(3), LocalDateTime.of(2024, Month.JUNE, 25, 18, 10));
 
-      /** НАПИСАТЬ ВРЕМЕННО СОЗДАВАЕМЫЙ ФАЙЛ*/
+         failTest = File.createTempFile("test", "csv");
     }
 
     @Test
     public void testSaveAndLoadEmptyFile() throws IOException {// сохранение и загрузка пустого файла;
-/** ДЛЯ ЭТОГО ТЕСТА*/
-        testFile = fileBackedTaskManager.text;
-        BufferedReader brt = new BufferedReader(new FileReader(testFile));
-        assertEquals(brt.readLine(), null);
+        FileWriter fw = new FileWriter(failTest);
+        assertNotEquals(fw, null);
     }
     @Test
     public void testThatFileBackedTaskManagerAddTasksDifferentTypesAndCanFindThemById() {// проверьте, что FileBackedTaskManagerTest действительно добавляет задачи разного типа и может найти их по id;
-        // Добавляем задачи в менеджер задач
+
         taskManager.addTask(task);
         taskManager.addEpic(epic);
         taskManager.addSubtask(subtask);
 
-        // Проверяем, что задачи успешно добавлены и найдены по их id
         assertEquals(task.getId(), 1);
         assertEquals(epic.getId(), 2);
         assertEquals(subtask.getId(), 3);

@@ -13,6 +13,8 @@ import app.tasks.Task;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
+import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.Month;
@@ -30,12 +32,15 @@ class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
     protected Subtask subtask;
 
     @BeforeEach
-    public void setUp() {
+    public void setUp() throws IOException {
         taskManager = new InMemoryTaskManager();
 
         task = new Task("Задача 1", "Описание задачи 1", Duration.ofMinutes(3), LocalDateTime.of(2024, Month.JUNE, 26, 18, 10));
         epic = new Epic("Эпик 1", "Описание эпика 1");
         subtask = new Subtask("Подзадача 1", "Описание подзадачи 1", epic, Duration.ofMinutes(3), LocalDateTime.now());
+
+        File f = File.createTempFile("test", "csv");
+
     }
 
     @Test
@@ -75,7 +80,7 @@ class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
         HistoryManager managerHM = Managers.getDefaultHistory();
 
         assertNotNull(managerTM, "Утилитарный класс TaskManager проинициализирован");
-        assertNotNull(managerHM,"Утилитарный класс HistoryManager проинициализирован");
+        assertNotNull(managerHM, "Утилитарный класс HistoryManager проинициализирован");
     }
 
     @Test
