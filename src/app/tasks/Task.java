@@ -3,6 +3,8 @@ package app.tasks;
 import app.enums.Status;
 import app.enums.TypeTES;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Task {
@@ -11,14 +13,32 @@ public class Task {
     protected Status status;
     protected int id;
     public TypeTES type;
+    protected Duration duration;
+    protected LocalDateTime startTime;
 
-    public Task(String name, String description) {
+    public Task(String name, String description, Duration duration, LocalDateTime startTime) {
         this.name = name;
         this.description = description;
         this.status = Status.NEW;
         this.type = type;
+        this.duration = duration;
+        this.startTime = startTime;
     }
 
+    public Task(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
+
+    public LocalDateTime getEndTime(){//дата и время завершения задачи, которые рассчитываются исходя из startTime и duration
+        return startTime.plus(duration);
+    }
+    public Duration getDuration() {
+        return duration;
+    }
+    public LocalDateTime getStartTime() {
+            return startTime;
+    }
     public int getId() {
         return id;
     }
@@ -51,7 +71,7 @@ public class Task {
         this.type = type;
     }
 
-    public TypeTES getTypeTES(){
+    public TypeTES getTypeTES() {
         return type;
     }
 
@@ -59,14 +79,18 @@ public class Task {
         this.id = id;
     }
 
-    @Override
-    public String toString() {
-        // "id = " + id + TypeTES.values() + ", название = " + name + ", описание = " + description + ", статус = " + status + "\n";
-
-        return id + ", " + type + ", " + name + ", " + description + ", " + status + "\n";
-    }
-
-
+@Override
+public String toString() {
+    return
+             name + '\'' +
+            ", " + description + '\'' +
+            ", " + status +
+            ", " + id +
+            ", " + type +
+            ", " + duration +
+            " минут, " + startTime +
+             "\n";
+}
 
     @Override
     public boolean equals(Object obj) {
@@ -75,4 +99,6 @@ public class Task {
         Task otherTask = (Task) obj;
         return Objects.equals(id, otherTask.id);
     }
+
+
 }

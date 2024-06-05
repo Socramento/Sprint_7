@@ -11,42 +11,65 @@ import app.tasks.Task;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.Month;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-class FileBackedTaskManagerTest {
+class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskManager>{
 
     protected FileBackedTaskManager fileBackedTaskManager;
 
     protected Task task;
     protected Epic epic;
     protected Subtask subtask;
-    File testFile;
-
+    File failTest;
     @BeforeEach
-    public void setUp() {
+    public void setUp() throws IOException {
 
-        fileBackedTaskManager = new FileBackedTaskManager();
+        taskManager = new FileBackedTaskManager();
 
-        task = new Task("Задача 1", "Описание задачи 1");
+        task = new Task("Задача 1", "Описание задачи 1", Duration.ofMinutes(3), LocalDateTime.of(2024, Month.JUNE, 25, 18, 10));
         epic = new Epic("Эпик 1", "Описание эпика 1");
-        subtask = new Subtask("Подзадача 1", "Описание подзадачи 1", epic);
+        subtask = new Subtask("Подзадача 1", "Описание подзадачи 1", epic, Duration.ofMinutes(3), LocalDateTime.of(2024, Month.JUNE, 25, 18, 10));
+
+         failTest = File.createTempFile("test", "csv");
     }
 
-    @Test//+
+    @Test
+    public void testSaveAndLoadEmptyFile() throws IOException {
+        FileWriter fw = new FileWriter(failTest);
+        assertNotEquals(fw, null);
+    }
+    @Test
+    public void testThatFileBackedTaskManagerAddTasksDifferentTypesAndCanFindThemById() {
+
+        taskManager.addTask(task);
+        taskManager.addEpic(epic);
+        taskManager.addSubtask(subtask);
+
+        assertEquals(task.getId(), 1);
+        assertEquals(epic.getId(), 2);
+        assertEquals(subtask.getId(), 3);
+    }
+
+    @Test
     public void testThatInstancesClassTaskEqualIfTheirIdSimilar() {
         task.setTypeTES(TypeTES.TASK);
         task.setId(1);
 
-        Task taskTWO = new Task("Задача 2", "Описание задачи 2");
+        Task taskTWO = new Task("Задача 2", "Цельная", Duration.ofMinutes(30), LocalDateTime.of(2024, Month.JUNE, 25, 18, 0));
         taskTWO.setTypeTES(TypeTES.TASK);
         taskTWO.setId(1);
 
         assertEquals(task, taskTWO);
     }
 
-    @Test//+
+    @Test
     public void testThatHeirsOfTaskEqualIfTheirIdEqual() {
         task.setTypeTES(TypeTES.TASK);
         task.setId(1);
@@ -57,32 +80,23 @@ class FileBackedTaskManagerTest {
         assertEquals(task.getId(), epic.getId());
     }
 
-    @Test//+
+    @Test
     public void testThatSubtaskCantMakeSelfEpic() {
         subtask.setEpicId(subtask.getId());
-        assertFalse(fileBackedTaskManager.getSubtasks().contains(subtask));
+        assertFalse(taskManager.getSubtasks().contains(subtask));
     }
 
     @Test//+
     public void testThatUtilityClassAlwaysReturnsInitializedAndReadyUseInstancesOfManagers() {
         TaskManager managerTM = Managers.getDefault();
+
         HistoryManager managerHM = Managers.getDefaultHistory();
 
-        assertNotNull("Утилитарный класс TaskManager проинициализирован", managerTM);
-        assertNotNull("Утилитарный класс HistoryManager проинициализирован", managerHM);
+        assertNotNull( managerTM.toString(),"Утилитарный класс TaskManager проинициализирован");
+        assertNotNull(managerHM, "Утилитарный класс HistoryManager проинициализирован");
     }
 
-    @Test
-    public void testThatFileBackedTaskManagerTestAddTasksDifferentTypesAndCanFindThemById() {
-        // Добавляем задачи в менеджер задач
-        fileBackedTaskManager.addTask(task);
-        fileBackedTaskManager.addEpic(epic);
-        fileBackedTaskManager.addSubtask(subtask);
 
-
-        assertEquals(task.getId(), 1);
-        assertEquals(epic.getId(), 2);
-        assertEquals(subtask.getId(), 3);
-
-    }
 }
+
+

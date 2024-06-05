@@ -1,6 +1,7 @@
 package app.test;
-
+//ПУЛ РЕКВЕСТ
 import app.enums.HistoryManager;
+import app.enums.Status;
 import app.enums.TypeTES;
 import app.history.InMemoryHistoryManager;
 import app.history.InMemoryTaskManager;
@@ -12,11 +13,17 @@ import app.tasks.Task;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
+import java.io.IOException;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.Month;
+import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-class InMemoryTaskManagerTest {
+class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
     protected InMemoryTaskManager taskManager;
     protected InMemoryHistoryManager historyManager;
 
@@ -25,12 +32,15 @@ class InMemoryTaskManagerTest {
     protected Subtask subtask;
 
     @BeforeEach
-    public void setUp() {
+    public void setUp() throws IOException {
         taskManager = new InMemoryTaskManager();
 
-        task = new Task("Задача 1", "Описание задачи 1");
+        task = new Task("Задача 1", "Описание задачи 1", Duration.ofMinutes(3), LocalDateTime.of(2024, Month.JUNE, 26, 18, 10));
         epic = new Epic("Эпик 1", "Описание эпика 1");
-        subtask = new Subtask("Подзадача 1", "Описание подзадачи 1", epic);
+        subtask = new Subtask("Подзадача 1", "Описание подзадачи 1", epic, Duration.ofMinutes(3), LocalDateTime.now());
+
+        File f = File.createTempFile("test", "csv");
+
     }
 
     @Test
@@ -69,8 +79,8 @@ class InMemoryTaskManagerTest {
 
         HistoryManager managerHM = Managers.getDefaultHistory();
 
-        assertNotNull("Утилитарный класс TaskManager проинициализирован", managerTM);
-        assertNotNull("Утилитарный класс HistoryManager проинициализирован", managerHM);
+        assertNotNull(managerTM, "Утилитарный класс TaskManager проинициализирован");
+        assertNotNull(managerHM, "Утилитарный класс HistoryManager проинициализирован");
     }
 
     @Test
@@ -97,14 +107,13 @@ class InMemoryTaskManagerTest {
 
         assertTrue(tasksList.contains(taskGenerateID));
         assertTrue(tasksList.contains(task));
-
         assertNotEquals(taskGenerateID, task);
     }
 
     @Test
     public void testNotModificationTaskWhenAddInManager() {
         taskManager.addTask(task);
-        Task newTask = new Task("Задача 1", "Описание задачи 1");
+        Task newTask = new Task("Задача 1", "Описание задачи 1", Duration.ofMinutes(3), LocalDateTime.of(2024, Month.JUNE, 27, 18, 10));
         taskManager.addTask(newTask);
 
         assertNotEquals(task.getId(), newTask.getId());
@@ -128,20 +137,48 @@ class InMemoryTaskManagerTest {
 
     @Test
     public void testTaskManagerContainsOriginalTaskAfterFieldChanges() {
-
-        Task originalTask = new Task("Оригинальная задача", "Описание оригинальной задачи");
+        Task originalTask = new Task("Задача 1", "Описание задачи 1", Duration.ofMinutes(3), LocalDateTime.of(2024, Month.JUNE, 28, 18, 10));
         originalTask.setTypeTES(TypeTES.TASK);
 
-        int taskId = taskManager.addTask(originalTask);
+        taskManager.addTask(originalTask);
 
         originalTask.setName("Измененное название задачи");
         originalTask.setDescription("Измененное описание задачи");
-        originalTask.setTypeTES(TypeTES.EPIC); // Изменяем тип задачи
+        originalTask.setTypeTES(TypeTES.EPIC);
 
-        //Task taskFromManager = taskManager.getTasks().get(0);
+        assertEquals("Измененное название задачи", originalTask.getName(), "Имя не изменилось");//
+        assertEquals("Измененное описание задачи", originalTask.getDescription(), "Описание не изменилось");
+        assertEquals(TypeTES.EPIC, originalTask.getTypeTES(), "Статус не поменялся");
+    }
 
-        assertEquals("Название задачи должно быть изменено", originalTask.getName(), "Измененное название задачи");//
-        assertEquals("Описание задачи должно быть изменено", originalTask.getDescription(),  "Измененное описание задачи");
-        assertEquals("Тип задачи должен быть изменен", TypeTES.EPIC, originalTask.getTypeTES());
+    @Test
+    public void testCalculateEpicStatus() {
+
+        ArrayList<Subtask> subtasksList = new ArrayList<>();
+
+        for (int i = 0; i < 3; i++) {
+            Subtask subtask = new Subtask("Подзадача " + i, "Описание", epic, Duration.ofMinutes(10), LocalDateTime.now());
+            subtask.setStatus(Status.NEW);
+            subtasksList.add(subtask);
+        }
+        epic.getListSubtask().addAll(subtasksList);
+        taskManager.addEpic(epic);
+        taskManager.updateEpicStatus(epic);
+        assertEquals(Status.NEW, epic.getStatus());
+
+        for (Subtask subtask : subtasksList) {
+            subtask.setStatus(Status.DONE);
+        }
+        taskManager.updateEpicStatus(epic);
+        assertEquals(Status.DONE, epic.getStatus());
+
+        subtasksList.get(0).setStatus(Status.NEW);
+        subtasksList.get(1).setStatus(Status.DONE);
+        taskManager.updateEpicStatus(epic);
+        assertEquals(Status.IN_PROGRESS, epic.getStatus());
+
+        subtasksList.get(1).setStatus(Status.IN_PROGRESS);
+        taskManager.updateEpicStatus(epic);
+        assertEquals(Status.IN_PROGRESS, epic.getStatus());
     }
 }

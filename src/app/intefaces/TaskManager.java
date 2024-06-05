@@ -6,6 +6,8 @@ import app.tasks.Task;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TreeSet;
+
 public interface TaskManager {
 
     ArrayList<Task> getTasks();
@@ -45,4 +47,6 @@ public interface TaskManager {
     void removeSubtask(Subtask subtask);
 
     void updateSubtask(Subtask subtask);
+
+    TreeSet<Task> getPrioritizedTasks();
 }
