@@ -8,12 +8,14 @@ public class Epic extends Task {
     protected ArrayList<Subtask> subList;
     protected LocalDateTime endTime;
 
+
     public Epic(String name, String description) {
         super(name, description);
         subList = new ArrayList<>();
         this.startTime = getStartTime();
         this.endTime = getEndTime();
         this.duration = Duration.between(endTime, startTime);
+
     }
 
     public LocalDateTime getStartTime() {
@@ -44,13 +46,43 @@ public class Epic extends Task {
     }
 
     public ArrayList<Subtask> getListSubtask() {
-
         return subList;
     }
 
 
+//    @Override
+//    public String toString() {
+//        return "ЭПИК" + ", ЗАВЕРШЕНИЕ = " +  getEndTime() + "\n";
+//    }
+
     @Override
     public String toString() {
-        return "ЭПИК" + ", ЗАВЕРШЕНИЕ = " +  getEndTime() + "\n";
+//
+//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm");
+//        String formattedStartTime = startTime != null ? startTime.plus(duration).format(formatter) : "(Время и дата не введены!)";
+
+        return name +
+                ", " + description +
+                ", " + status +
+                ", " + id +
+                ", " + type +
+                ", " + getEndTime() +
+                "\n";
     }
+
+//    @Override
+//    public String toString() {
+//
+//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm");
+//        String formattedStartTime = startTime != null ? startTime.plus(duration).format(formatter) : "(Время и дата не введены!)";
+//
+//        return name +
+//                ", " + description +
+//                ", " + status +
+//                ", " + id +
+//                ", " + type +
+//                ", " + "Период " + duration.toMinutes() + " минут" +
+//                ", " + formattedStartTime +
+//                "\n";
+//    }
 }

@@ -102,11 +102,11 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
 
         StringBuilder sb = new StringBuilder();
         String line;
-        while ((line = bf.readLine()) == null) {
+        while ((line = bf.readLine()) != null) {/**ИСПРАВЛЯЛ на !=*/
             sb.append(line);
         }
 
-        return FileBackedTaskManager.loadFromFile(file);
+        return new FileBackedTaskManager();
     }
 
     @Override
@@ -114,7 +114,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
         task.type = TypeTES.TASK;
         final int id = super.addTask(task);
         save();
-
         return id;
     }
 
@@ -210,4 +209,10 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
         super.updateSubtask(subtask);
         save();
     }
+
+    @Override
+    public List<Task> getHistory() {
+        return historyManager.getHistory();
+    }
+
 }
