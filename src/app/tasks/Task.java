@@ -5,6 +5,7 @@ import app.enums.TypeTES;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 public class Task {
@@ -16,11 +17,27 @@ public class Task {
     protected Duration duration;
     protected LocalDateTime startTime;
 
+    public TypeTES getType() {
+        return type;
+    }
+
+    public void setType(TypeTES type) {
+        this.type = type;
+    }
+
+    public void setDuration(Duration duration) {
+        this.duration = duration;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
     public Task(String name, String description, Duration duration, LocalDateTime startTime) {
         this.name = name;
         this.description = description;
         this.status = Status.NEW;
-        this.type = type;
+        this.type = TypeTES.TASK;
         this.duration = duration;
         this.startTime = startTime;
     }
@@ -30,15 +47,18 @@ public class Task {
         this.description = description;
     }
 
-    public LocalDateTime getEndTime(){//дата и время завершения задачи, которые рассчитываются исходя из startTime и duration
+    public LocalDateTime getEndTime() {//дата и время завершения задачи, которые рассчитываются исходя из startTime и duration
         return startTime.plus(duration);
     }
+
     public Duration getDuration() {
         return duration;
     }
+
     public LocalDateTime getStartTime() {
-            return startTime;
+        return startTime;
     }
+
     public int getId() {
         return id;
     }
@@ -79,18 +99,21 @@ public class Task {
         this.id = id;
     }
 
-@Override
-public String toString() {
-    return
-             name + '\'' +
-            ", " + description + '\'' +
-            ", " + status +
-            ", " + id +
-            ", " + type +
-            ", " + duration +
-            " минут, " + startTime +
-             "\n";
-}
+    @Override
+    public String toString() {
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm");
+        String formattedStartTime = startTime != null ? startTime.plus(duration).format(formatter) : "(Время и дата не введены!)";
+
+        return name +
+                ", " + description +
+                ", " + status +
+                ", " + id +
+                ", " + type +
+                ", " + "Период " + duration.toMinutes() + " минут" +
+                ", " + formattedStartTime +
+                "\n";
+    }
 
     @Override
     public boolean equals(Object obj) {
@@ -99,6 +122,4 @@ public String toString() {
         Task otherTask = (Task) obj;
         return Objects.equals(id, otherTask.id);
     }
-
-
 }

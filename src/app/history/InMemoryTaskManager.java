@@ -2,6 +2,7 @@ package app.history;
 
 import app.enums.HistoryManager;
 import app.enums.Status;
+import app.enums.TypeTES;
 import app.intefaces.TaskManager;
 import app.taskmanager.Managers;
 import app.tasks.Epic;
@@ -21,6 +22,13 @@ public class InMemoryTaskManager implements TaskManager {
     Comparator<Task> comparator = Comparator.comparing(Task::getStartTime);
     TreeSet<Task> sortTaskST = new TreeSet<>(comparator);
 
+
+    @Override
+    public TreeSet<Task> getPrioritizedTasks() {
+        //sortTaskST.forEach(System.out::println);
+        return sortTaskST;
+    }
+
     public void intersection(Task task) {
         boolean hasIntersection = sortTaskST.stream()
                 .anyMatch(el -> el.getStartTime().isBefore(task.getStartTime()) & el.getEndTime().isAfter(task.getStartTime()));
@@ -31,13 +39,6 @@ public class InMemoryTaskManager implements TaskManager {
             System.out.println("Пересечения нет!");
         }
     }
-
-    @Override
-    public TreeSet<Task> getPrioritizedTasks() {
-        sortTaskST.forEach(System.out::println);
-        return sortTaskST;
-    }
-
     @Override
     public List<Task> getHistory() {
         return historyManager.getHistory();
@@ -71,6 +72,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public int addEpic(Epic epic) {
+        epic.type = TypeTES.EPIC;
         epic.setId(++id);
         updateEpicStatus(epic);
         listEpics.put(epic.getId(), epic);
@@ -80,6 +82,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public int addSubtask(Subtask subtask) {
+        subtask.type = TypeTES.SUBTASK;
         subtask.setId(++id);
         Epic epic = listEpics.get(subtask.getEpicId());
 

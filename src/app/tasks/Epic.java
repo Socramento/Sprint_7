@@ -8,12 +8,14 @@ public class Epic extends Task {
     protected ArrayList<Subtask> subList;
     protected LocalDateTime endTime;
 
+
     public Epic(String name, String description) {
         super(name, description);
         subList = new ArrayList<>();
         this.startTime = getStartTime();
         this.endTime = getEndTime();
         this.duration = Duration.between(endTime, startTime);
+
     }
 
     public LocalDateTime getStartTime() {
@@ -24,7 +26,7 @@ public class Epic extends Task {
                 startTime = min;
             }
         }
-        return startTime;//
+        return startTime;
     }
 
     @Override
@@ -44,13 +46,19 @@ public class Epic extends Task {
     }
 
     public ArrayList<Subtask> getListSubtask() {
-
         return subList;
     }
 
 
     @Override
     public String toString() {
-        return "ЭПИК" + ", ЗАВЕРШЕНИЕ = " +  getEndTime() + "\n";
+
+        return name +
+                ", " + description +
+                ", " + status +
+                ", " + id +
+                ", " + type +
+                ", " + getEndTime() +
+                "\n";
     }
 }
