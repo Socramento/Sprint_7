@@ -80,6 +80,7 @@ public class HttpTaskServer {
     public static void stopServer() {
         if (isStartServer) {
             httpServer.stop(0);
+            isStartServer = true;
             System.out.println("HTTP-сервер отключен!");
         }
     }

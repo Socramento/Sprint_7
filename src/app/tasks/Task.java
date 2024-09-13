@@ -17,6 +17,22 @@ public class Task {
     protected Duration duration;
     protected LocalDateTime startTime;
 
+
+
+    public Task(String name, String description, Duration duration, LocalDateTime startTime) {
+        this.name = name;
+        this.description = description;
+        this.status = Status.NEW;
+        this.type = TypeTES.TASK;
+        this.duration = duration;
+        this.startTime = startTime;
+    }
+
+    public Task(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
+
     public TypeTES getType() {
         return type;
     }
@@ -31,20 +47,6 @@ public class Task {
 
     public void setStartTime(LocalDateTime startTime) {
         this.startTime = startTime;
-    }
-
-    public Task(String name, String description, Duration duration, LocalDateTime startTime) {
-        this.name = name;
-        this.description = description;
-        this.status = Status.NEW;
-        this.type = TypeTES.TASK;
-        this.duration = duration;
-        this.startTime = startTime;
-    }
-
-    public Task(String name, String description) {
-        this.name = name;
-        this.description = description;
     }
 
     public LocalDateTime getEndTime() {//дата и время завершения задачи, которые рассчитываются исходя из startTime и duration
