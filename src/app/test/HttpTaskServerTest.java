@@ -1,7 +1,10 @@
-package app.main;
+package app.test;
 
 import app.history.InMemoryTaskManager;
 import app.intefaces.TaskManager;
+import app.main.DurationAdapter;
+import app.main.HttpTaskServer;
+import app.main.LocalDateTimeAdapter;
 import app.tasks.Task;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -42,6 +45,9 @@ public class HttpTaskServerTest {
 
     @AfterEach
     public void shutDown() {
+        taskManager.clearTasks();
+        taskManager.clearEpics();
+        taskManager.clearSubtasks();
         httpTaskServer.stopServer();
     }
 
@@ -67,4 +73,6 @@ public class HttpTaskServerTest {
         Assertions.assertEquals(1, tasksFromManager.size(), "Некорректное количество задач");
         Assertions.assertEquals("Test 1", tasksFromManager.get(0).getName(), "Некорректное имя задачи");
     }
+
+
 }

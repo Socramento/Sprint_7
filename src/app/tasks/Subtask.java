@@ -1,5 +1,8 @@
 package app.tasks;
 
+import app.enums.Status;
+import app.enums.TypeTES;
+
 import java.time.Duration;
 import java.time.LocalDateTime;
 
@@ -8,7 +11,14 @@ public class Subtask extends Task {
 
     public Subtask(String name, String description, Epic epic, Duration duration, LocalDateTime startTime) {
         super(name, description,duration, startTime );
-        epicId = epic.id;
+        this.epicId = epic.id;
+        this.name = name;
+        this.description = description;
+        this.status = Status.NEW;
+        this.type = TypeTES.TASK;
+        this.duration = duration;
+        this.startTime = startTime;
+
     }
 
     public void setEpicId(int epicId) {
@@ -19,21 +29,17 @@ public class Subtask extends Task {
         return epicId;
     }
 
+    @Override
+    public String toString() {
 
-//    @Override
-//    public String toString() {
-//
-//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm");
-//        String formattedStartTime = startTime != null ? startTime.plus(duration).format(formatter) : "(Время и дата не введены!)";
-//
-//        return name +
-//                ", " + description +
-//                ", " + status +
-//                ", " + id +
-//                ", " + type +
-//                ", " + "Период " + duration.toMinutes() + " минут" +
-//                ", " + formattedStartTime +
-//                "\n";
-//    }
+        return name +
+                ", " + description +
+                ", " + status +
+                ", " + id +
+                ", " + type +
+                ", " + duration +
+                ", " + startTime +
+                        "\n";
+    }
 }
 

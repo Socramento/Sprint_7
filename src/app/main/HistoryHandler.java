@@ -55,18 +55,6 @@ public class HistoryHandler extends BaseHttpHandler implements HttpHandler {
         OutputStream os = exchange.getResponseBody();
         os.write(bytes);
         os.close();
-//        exchange.getResponseHeaders().set("Content-Type", "application/json; charset=UTF-8");
-//        exchange.sendResponseHeaders(200, 0);
-//
-//        // Преобразование истории в JSON
-//        Gson gson = new Gson();
-//        String jsonHistory = gson.toJson(fileBackedTaskManager.getHistory());
-//
-//        // Отправка JSON в ответе
-//        byte[] bytes = jsonHistory.getBytes("UTF-8");
-//        OutputStream os = exchange.getResponseBody();
-//        os.write(bytes);
-//        os.close();
     }
 
     private EndpointHistory getEndpoint(String requestPath, String requestMethod) {

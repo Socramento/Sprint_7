@@ -26,7 +26,7 @@ public class Epic extends Task {
                 startTime = min;
             }
         }
-        return startTime;//
+        return startTime;
     }
 
     @Override
@@ -50,16 +50,8 @@ public class Epic extends Task {
     }
 
 
-//    @Override
-//    public String toString() {
-//        return "ЭПИК" + ", ЗАВЕРШЕНИЕ = " +  getEndTime() + "\n";
-//    }
-
     @Override
     public String toString() {
-//
-//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm");
-//        String formattedStartTime = startTime != null ? startTime.plus(duration).format(formatter) : "(Время и дата не введены!)";
 
         return name +
                 ", " + description +
@@ -69,20 +61,4 @@ public class Epic extends Task {
                 ", " + getEndTime() +
                 "\n";
     }
-
-//    @Override
-//    public String toString() {
-//
-//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm");
-//        String formattedStartTime = startTime != null ? startTime.plus(duration).format(formatter) : "(Время и дата не введены!)";
-//
-//        return name +
-//                ", " + description +
-//                ", " + status +
-//                ", " + id +
-//                ", " + type +
-//                ", " + "Период " + duration.toMinutes() + " минут" +
-//                ", " + formattedStartTime +
-//                "\n";
-//    }
 }

@@ -83,8 +83,8 @@ public class TaskHandler extends BaseHttpHandler implements HttpHandler {
         sendText(exchange, response);
     }
 
-    private void handlePostCreateTask(HttpExchange exchange) throws IOException {
 
+    private void handlePostCreateTask(HttpExchange exchange) throws IOException {
         allTasks = taskManager.getTasks();
         try {
             InputStream inputStream = exchange.getRequestBody();
@@ -108,7 +108,6 @@ public class TaskHandler extends BaseHttpHandler implements HttpHandler {
             taskManager.addTask(task);
 
             System.out.println("Кол-во задач добавленное через хендлер " + allTasks.size());
-            //System.out.println(task);
 
             sendText(exchange, "Задача успешно создана!\n");
         } catch (Exception e) {

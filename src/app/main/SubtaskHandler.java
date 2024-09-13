@@ -13,12 +13,12 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class SubtaskHandler extends BaseHttpHandler implements HttpHandler {
-    public static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
-    private final TaskManager taskManager;
+    private static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
+    private TaskManager taskManager;
     private List<Subtask> allSubtaskus;
-
     Gson gson = HttpTaskServer.getGson();
 
     public SubtaskHandler(TaskManager taskManager) {
@@ -49,17 +49,14 @@ public class SubtaskHandler extends BaseHttpHandler implements HttpHandler {
     }
 
     private void handleGetAllSubtasks(HttpExchange exchange) throws IOException {
+
         allSubtaskus = taskManager.getSubtasks();
-        try {
 
-            String jsonString = gson.toJson(allSubtaskus);
-            sendText(exchange, jsonString);
+        String list = allSubtaskus.stream()
+                .map(Subtask::toString)
+                .collect(Collectors.joining("\n"));
 
-            System.out.println(allSubtaskus.size());
-        } catch (Exception e) {
-            e.printStackTrace();
-            sendNotFound(exchange, "Какая-то засада");
-        }
+        sendText(exchange, list);
     }
 
     private void handleGetSubtaskByID(HttpExchange exchange) throws IOException {
@@ -94,7 +91,6 @@ public class SubtaskHandler extends BaseHttpHandler implements HttpHandler {
 
     private void handlePostCreateSubtask(HttpExchange exchange) throws IOException {
         allSubtaskus = taskManager.getSubtasks();
-
         try {
             InputStream inputStream = exchange.getRequestBody();
             String body = new String(inputStream.readAllBytes(), DEFAULT_CHARSET);
@@ -115,6 +111,8 @@ public class SubtaskHandler extends BaseHttpHandler implements HttpHandler {
             }
             allSubtaskus.add(subtask);
             taskManager.addSubtask(subtask);
+
+            System.out.println("Кол-во задач добавленное через хендлер " + allSubtaskus.size());
 
             sendText(exchange, "Задача успешно создана!\n");
         } catch (Exception e) {
