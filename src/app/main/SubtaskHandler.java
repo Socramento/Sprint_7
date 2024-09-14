@@ -182,9 +182,10 @@ public class SubtaskHandler extends BaseHttpHandler implements HttpHandler {
             return Optional.empty();
         }
     }
+    enum EndpointSubtask {GET_SUBTASK, GET_SUBTASK_BY_ID, POST_SUBTASK, DELETE_SUBTASK, UNKNOWN}
 }
 
-enum EndpointSubtask {GET_SUBTASK, GET_SUBTASK_BY_ID, POST_SUBTASK, DELETE_SUBTASK, UNKNOWN}
+
 
 class SubtaskListTypeToken extends TypeToken<List<Subtask>> {
 
