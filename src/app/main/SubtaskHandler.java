@@ -112,8 +112,8 @@ public class SubtaskHandler extends BaseHttpHandler implements HttpHandler {
             allSubtaskus.add(subtask);
             taskManager.addSubtask(subtask);
 
-            System.out.println("Кол-во задач добавленное через хендлер " + allSubtaskus.size());
-
+            System.out.println("Кол-во сабтасок добавленное через хендлер " + allSubtaskus.size());
+            inputStream.close();
             sendText(exchange, "Задача успешно создана!\n");
         } catch (Exception e) {
             e.printStackTrace();

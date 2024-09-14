@@ -36,6 +36,7 @@ public class BaseHttpHandler {
         h.getResponseHeaders().set("Content-Type", "text/plain;charset=utf-8");
         h.sendResponseHeaders(200, 0);
         h.getResponseBody().write(resp);
+        h.close();
 
     }
 }

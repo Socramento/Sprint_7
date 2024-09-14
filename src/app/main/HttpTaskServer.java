@@ -17,20 +17,12 @@ import java.time.LocalDateTime;
 import java.time.Month;
 
 public class HttpTaskServer {
-    private static final int PORT = 8080;
+    private static final int PORT = 8089;
     static TaskManager taskManager = Managers.getDefault();
     static FileBackedTaskManager fileBackedTaskManager = new FileBackedTaskManager();
     static HttpServer httpServer;
     private static boolean isStartServer = false;
 
-    static {
-        try {
-            httpServer = HttpServer.create(new InetSocketAddress(PORT), 0);
-
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     public HttpTaskServer(TaskManager taskManager) {
         this.taskManager = taskManager;
@@ -63,8 +55,8 @@ public class HttpTaskServer {
         startServer();
     }
 
-    public static void startServer()  {
-
+    public static void startServer() throws IOException {
+        httpServer = HttpServer.create(new InetSocketAddress(PORT), 0);
         if (!isStartServer) {
             httpServer.createContext("/tasks", new TaskHandler(taskManager));
             httpServer.createContext("/epics", new EpicHandler(taskManager));

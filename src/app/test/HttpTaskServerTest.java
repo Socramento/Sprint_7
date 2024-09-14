@@ -7,10 +7,7 @@ import app.tasks.Epic;
 import app.tasks.Subtask;
 import app.tasks.Task;
 import com.google.gson.Gson;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.io.IOException;
 import java.net.URI;
@@ -31,20 +28,17 @@ public class HttpTaskServerTest {
 
 
     @BeforeEach
-    public void setUp() throws InterruptedException {
+    public void setUp() throws InterruptedException, IOException {
         taskManager.clearTasks();
         taskManager.clearEpics();
         taskManager.clearSubtasks();
 
         httpTaskServer.startServer();
-        //Thread.sleep(2000);
+       // Thread.sleep(8000);
     }
 
     @AfterEach
     public void shutDown() {
-        taskManager.clearTasks();
-        taskManager.clearEpics();
-        taskManager.clearSubtasks();
         httpTaskServer.stopServer();
     }
 
@@ -56,7 +50,7 @@ public class HttpTaskServerTest {
         String taskJson = gson.toJson(task);
 
         HttpClient client = HttpClient.newHttpClient();
-        URI url = URI.create("http://localhost:8080/tasks");
+        URI url = URI.create("http://localhost:8089/tasks");
         HttpRequest request = HttpRequest.newBuilder().uri(url).POST(HttpRequest.BodyPublishers.ofString(taskJson)).build();
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
@@ -75,10 +69,7 @@ public class HttpTaskServerTest {
     public void testAddEpic() throws IOException, InterruptedException {
 
         Epic epic = new Epic("Test 2", "Testing epic 2");
-//        epic.setStatus(Status.NEW);
-//        epic.setId(500);
-//        epic.setStartTime(LocalDateTime.of(2024, Month.AUGUST, 11, 0, 0));
-//
+
         Subtask subtask5 = new Subtask("Тест Сабтаск 5", "для Эпика", epic, Duration.ofMinutes(3), LocalDateTime.of(2024, Month.JUNE, 25, 12, 10));
         Subtask subtask6 = new Subtask("Тест Сабтаск 6", "для Эпика", epic, Duration.ofMinutes(12), LocalDateTime.of(2024, Month.JUNE, 25, 11, 55));
         taskManager.addSubtask(subtask5);
@@ -87,7 +78,7 @@ public class HttpTaskServerTest {
         String epicJson = gson.toJson(epic);
 
         HttpClient client = HttpClient.newHttpClient();
-        URI url = URI.create("http://localhost:8080/epics");
+        URI url = URI.create("http://localhost:8089/epics");
         HttpRequest request = HttpRequest.newBuilder().uri(url)
                 .POST(HttpRequest.BodyPublishers.ofString(epicJson))
                 .build();
@@ -97,7 +88,7 @@ public class HttpTaskServerTest {
         Assertions.assertEquals(200, response.statusCode());
 
         List<Epic> epicFromManager = taskManager.getEpics();
-        System.out.println("Кол-во задач добавленное через тест " + epicFromManager.size());
+        System.out.println("Кол-во эпиков добавленное через тест " + epicFromManager.size());
 
         Assertions.assertNotNull(epicFromManager, "Задачи не возвращаются");
         Assertions.assertEquals(1, epicFromManager.size(), "Некорректное количество задач");
@@ -113,7 +104,7 @@ public class HttpTaskServerTest {
         String subtaskJson = gson.toJson(subtask);
 
         HttpClient client = HttpClient.newHttpClient();
-        URI url = URI.create("http://localhost:8080/subtasks");
+        URI url = URI.create("http://localhost:8089/subtasks");
 
         HttpRequest request3 = HttpRequest.newBuilder().uri(url).POST(HttpRequest.BodyPublishers.ofString(subtaskJson)).build();
 
@@ -122,7 +113,7 @@ public class HttpTaskServerTest {
         Assertions.assertEquals(200, response3.statusCode());
 
         List<Subtask> subtasksFromManager = taskManager.getSubtasks();
-        System.out.println("Кол-во задач добавленное через тест " + subtasksFromManager.size());
+        System.out.println("Кол-во сабтасок добавленное через тест " + subtasksFromManager.size());
 
         Assertions.assertNotNull(subtasksFromManager, "Задачи не возвращаются");
         Assertions.assertEquals(1, subtasksFromManager.size(), "Некорректное количество задач");
