@@ -107,7 +107,7 @@ public class EpicHandler extends BaseHttpHandler implements HttpHandler {
             taskManager.addEpic(epic);
 
             System.out.println("Кол-во эпиков добавленное через хендлер " + allEpics.size());
-
+            inputStream.close();
             sendText(exchange, "Задача успешно создана!\n");
         } catch (Exception e) {
             e.printStackTrace();

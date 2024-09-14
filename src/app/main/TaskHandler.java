@@ -108,7 +108,7 @@ public class TaskHandler extends BaseHttpHandler implements HttpHandler {
             taskManager.addTask(task);
 
             System.out.println("Кол-во задач добавленное через хендлер " + allTasks.size());
-
+            inputStream.close();
             sendText(exchange, "Задача успешно создана!\n");
         } catch (Exception e) {
             e.printStackTrace();
